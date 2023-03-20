@@ -1,0 +1,101 @@
+//
+// API ENDPOINTS USER
+//
+
+// HÄMTA ALLA USERS // SKICKA INTE MED LÖSENORD // BARA ID, NAMN + EMAIL PÅ ALLA USERS
+# @name getUsers
+GET http://localhost:3000/api/users
+
+###
+
+// HÄMTA SPECIFIK USER // SKICKA HELA OBJEKTET
+POST http://localhost:3000/api/users/
+Content-Type: application/json
+
+{
+  "id": "// EN USER ID"
+}
+
+###
+
+// SKAPA USER
+POST http://localhost:3000/api/users/add
+Content-Type: application/json
+
+{
+  "name": "Test Testsson",
+  "email": "test@mail.com",
+  "password": "test"
+}
+
+###
+
+// LOGGA IN USER
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+  "email": "// EN USER EMAIL",
+  "password": "// EN USER EMAIL"
+}
+
+###
+
+//
+// API ENDPOINTS PRODUKTER
+//
+
+// HÄMTA ALLA PRODUKTER
+
+# @name getProducts
+GET http://localhost:3000/api/products
+
+###
+
+// HÄMTA SPECIFIK PRODUKT
+GET http://localhost:3000/api/products/ // ID PÅ PRODUKT
+
+###
+
+// SKAPA PRODUKT
+POST http://localhost:3000/api/products/add
+Content-Type: application/json
+
+{
+  "name": "Produkt 1",
+  "description": "Beskrivning av produkt 1",
+  "price": 100, 
+  "lager": 10
+}
+
+###
+
+//
+// API ENDPOINTS ORDERS
+//
+
+// SKAPA ORDER FÖR EN SPECIFIK USER // PRODUCTS ÄR EN ARRAY MOTSVARANDE INNEHÅLLET I KUNDVAGN
+POST http://localhost:3000/api/orders/add
+Content-Type: application/json
+
+{
+  "user": "{{getUsers.response.body.$[0].id}}",
+      "products": [
+    {
+      "productId": "// ID PÅ EN PRODUKT",
+      "quantity": 1
+    },
+    {
+      "productId": "// ID PÅ EN PRODUKT",
+      "quantity": 2
+    }
+  ]
+}
+
+###
+
+
+// HÄMTA ALLA ORDERS
+GET http://localhost:3000/api/orders/all/
+
+###

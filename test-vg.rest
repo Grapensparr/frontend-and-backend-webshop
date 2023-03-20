@@ -1,0 +1,149 @@
+//
+// API ENDPOINTS USER
+//
+
+// HÄMTA ALLA USERS // SKICKA INTE MED LÖSENORD // BARA ID, NAMN + EMAIL PÅ ALLA USERS
+# @name getUsers
+GET http://localhost:3000/api/users
+
+###
+
+// HÄMTA SPECIFIK USER // SKICKA HELA OBJEKTET
+POST http://localhost:3000/api/users/
+Content-Type: application/json
+
+{
+  "id": "// ID PÅ EN SPECIFIK USER"
+}
+
+###
+
+// SKAPA USER
+POST http://localhost:3000/api/users/add
+Content-Type: application/json
+
+{
+  "name": "Test Testsson",
+  "email": "test@mail.com",
+  "password": "test"
+}
+
+###
+
+// LOGGA IN USER // VID FEL LÖSENORD SÅ SKALL SVARA MED 401
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+  "email": "// USER EMAIL",
+  "password": "// USER PASSWORD"
+}
+
+###
+
+//
+// API ENDPOINTS PRODUCTS
+//
+
+# @name getProducts
+GET http://localhost:3000/api/products
+
+###
+
+// HÄMTA SPECIFIK PRODUKT
+GET http://localhost:3000/api/products/ // ID PÅ EN SPECIFIK PRODUKT
+
+###
+
+// SKAPA PRODUKT // UTAN TOKEN SÅ SKALL ANROPET MISSLYCKAS = 401
+POST http://localhost:3000/api/products/add
+Content-Type: application/json
+
+{
+  "name": "Produkt 2",
+  "description": "Beskrivning av produkt 1",
+  "price": 100,
+  "lager": 10,
+  "category": "// ID PÅ EN SPECIFIK KATEGORI",
+  "token": "1234key1234"
+}
+
+###
+
+// HÄMTA ALLA PRODUKTER FÖR EN SPECIFIK KATEGORI
+GET http://localhost:3000/api/products/category/ // ID PÅ EN SPECIFIK KATEGORI
+###
+
+//
+// API ENDPOINTS KATEGORI
+// 
+
+// SKAPA KATEGORI, KEY MÅSTE ANGES // UTAN KEY SVARA 401
+# @name createCategory
+POST http://localhost:3000/api/categories/add
+Content-Type: application/json
+
+{
+  "name": "Kategori 1",
+  "token": "1234key1234"
+}
+
+###
+
+# @name getCategories
+GET http://localhost:3000/api/categories
+
+###
+
+//
+// API ENDPOINTS ORDERS
+//
+
+// HÄMTA ALLA ORDERS, KEY MÅSTE ANGES FÖR ATT FÅ TILLGÅNG TILL ORDERS
+GET http://localhost:3000/api/orders/all/ // API TOKEN
+
+###
+
+// HÄMTA ALLA ORDER, FEL KEY // SKALL MISSLYCKAS
+GET http://localhost:3000/api/orders/all/ // TEST MED FEL TOKEN
+
+###
+
+// SKAPA ORDER FÖR EN SPECIFIK USER
+POST http://localhost:3000/api/orders/add
+Content-Type: application/json
+
+{
+  "user": "// USER ID FÖR DEN SOM SKA SKAPA ORDERN",
+      "products": [
+    {
+      "productId": "// ETT PRODUKT ID",
+      "quantity": 1
+    },
+    {
+      "productId": "// ETT PRODUKT ID",
+      "quantity": 2
+    }
+  ]
+}
+
+###
+
+// HÄMTA ORDERS FÖR EN USER // SKALL MISSLYCKAS = INGEN KEY  // SVARA MED 401
+POST http://localhost:3000/api/orders/user
+Content-Type: application/json
+
+{
+    "user": "// USER ID FÖR DEN SOM SKA VISA ORDERS"
+}
+###
+
+// HÄMTA ORDERS FÖR EN USER // SKALL LYCKAS = KEY
+POST http://localhost:3000/api/orders/user
+Content-Type: application/json
+
+{
+    "user": "// USER ID FÖR DEN SOM SKA VISA ORDERS",
+    "token": "1234key1234"
+}
+###
