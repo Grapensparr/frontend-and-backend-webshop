@@ -4,11 +4,15 @@ const crypto = require('crypto-js');
 const { ObjectId } = require('mongodb');
 
 router.get('/', function(req, res, next) {
-  req.app.locals.db.collection('users').find().toArray()
+  req.app.locals.db.collection('users').find({}, { projection: { name: true, email: true } }).toArray()
   .then(result => {
     console.log('Found users', result);
     res.json(result)
   })
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  });
 });
 
 router.post('/', function(req, res, next) {
@@ -20,6 +24,10 @@ router.post('/', function(req, res, next) {
 
     res.json(result)
   })
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  });
 });
 
 router.post('/add', function(req, res, next) {
@@ -32,6 +40,10 @@ router.post('/add', function(req, res, next) {
     console.log('Result', result);
     res.json(result);
   })
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({ error: 'Internal server error' });
+  });
 });
 
 router.post('/login', function(req, res, next) {

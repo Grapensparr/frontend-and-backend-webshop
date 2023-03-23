@@ -7,6 +7,10 @@ router.get('/', function(req, res, next) {
     .then(result => {
         console.log('Found products', result);
         res.json(result)
+    })
+    .catch(err => {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
     });
 });
 
@@ -17,17 +21,31 @@ router.get('/:productId', function(req, res, next) {
     .then(result => {
         console.log('Found product', result);
         res.json(result)
+    })
+    .catch(err => {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
     });
 });
 
 router.post('/add', function(req, res, next) {
-    let newProduct = { name: req.body.name, description: req.body.description, price: req.body.price, lager: req.body.lager };
+    const token = req.body.token;
 
-    req.app.locals.db.collection('products').insertOne(newProduct)
-    .then(result => {
-        console.log('Result', result);
-        res.json(result);
-    });
+    if (!token || token !== process.env.TOKEN) {
+        res.status(401).json({ error: 'Not Authorized' });
+    } else {
+        let newProduct = { name: req.body.name, description: req.body.description, price: req.body.price, lager: req.body.lager };
+
+        req.app.locals.db.collection('products').insertOne(newProduct)
+        .then(result => {
+            console.log('Result', result);
+            res.json(result);
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+    };
 });
 
 module.exports = router;
