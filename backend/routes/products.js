@@ -34,7 +34,7 @@ router.post('/add', function(req, res, next) {
     if (!token || token !== process.env.TOKEN) {
         res.status(401).json({ error: 'Not Authorized' });
     } else {
-        let newProduct = { name: req.body.name, description: req.body.description, price: req.body.price, lager: req.body.lager };
+        let newProduct = { name: req.body.name, description: req.body.description, price: req.body.price, lager: req.body.lager, category: req.body.category };
 
         req.app.locals.db.collection('products').insertOne(newProduct)
         .then(result => {
@@ -46,6 +46,20 @@ router.post('/add', function(req, res, next) {
             res.status(500).json({ error: 'Internal server error' });
         });
     };
+});
+
+router.get('/category/:categoryId', function(req, res, next) {
+    const categoryId = req.params.categoryId;
+
+    req.app.locals.db.collection('products').find({ category: categoryId }).toArray()
+    .then(result => {
+        console.log('Found products for the specified category', result);
+        res.json(result);
+    })
+    .catch(err => {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    });
 });
 
 module.exports = router;
