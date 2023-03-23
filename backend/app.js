@@ -20,7 +20,7 @@ app.use(cors());
 
 MongoClient.connect(process.env.MONGODB_URI)
 .then(client => {
-    const db = client.db('projekt1')
+    const db = client.db('liza-grapensparr')
     app.locals.db = db;
 })
 .catch(err => console.log('err', err));

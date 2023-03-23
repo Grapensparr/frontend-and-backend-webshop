@@ -1,3 +1,5 @@
+import { printProductsGuest, printProductsUser } from './productCards.js';
+
 const userForm = document.getElementById('userForm');
 
 export function printLoginForm() {
@@ -20,9 +22,9 @@ export function printLoginForm() {
         };
     
         fetch('http://localhost:3000/api/users/login', {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(loginUser)
         })
@@ -31,11 +33,13 @@ export function printLoginForm() {
             console.log(data)
             if (data.name) {
                 welcomeMessage.innerText = 'Welcome ' + data.name + '!';
-                localStorage.setItem("loggedIn", data.name);
+                localStorage.setItem('loggedIn', data.name);
                 printLogoutBtn();
+                printProductsUser();
+                location.reload();
             } else {
                 const errorMessage = document.createElement('h3');
-                errorMessage.innerText = "Invalid credentials";
+                errorMessage.innerText = 'Invalid credentials';
             }
         });
     });
@@ -66,10 +70,10 @@ export function printRegistrationForm() {
             password: newPassword.value
         };
     
-        fetch("http://localhost:3000/api/users/add", {
-            method: "POST",
+        fetch('http://localhost:3000/api/users/add', {
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type': 'application/json',
             }, 
             body: JSON.stringify(user)
         })
@@ -95,6 +99,8 @@ export function printLogoutBtn() {
         localStorage.removeItem('loggedIn');
         welcomeMessage.innerText = 'Welcome!'
         printLoginForm();
+        location.reload();
+        printProductsGuest();
     });
 
     userForm.innerHTML = '';
