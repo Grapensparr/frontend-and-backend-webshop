@@ -2,6 +2,19 @@
   text-align: center;
 }
 
+header {
+  height: 150px;
+}
+header h1 {
+  text-align: center;
+}
+header .userForm {
+  float: right;
+}
+header .userForm .rightAlligned {
+  float: right;
+}
+
 .productGrid {
   display: flex;
   flex-wrap: wrap;
@@ -90,4 +103,8 @@ input {
 }
 .categoryContainer a:hover {
   text-decoration: underline;
+}
+
+footer {
+  text-align: center;
 }/*# sourceMappingURL=style.css.map */

@@ -1,4 +1,6 @@
 const userForm = document.getElementById('userForm');
+userForm.classList.add('userForm');
+const lineBreak = document.createElement('br');
 
 export function printLoginForm() {
     const LoginEmail = document.createElement('input');
@@ -8,10 +10,11 @@ export function printLoginForm() {
     const loginUserBtn = document.createElement('button');
     loginUserBtn.innerText = 'Log in';
     const registerUserBtn = document.createElement('button');
+    registerUserBtn.classList.add('rightAlligned')
     registerUserBtn.innerText = 'Not yet a user? Click here to register now!';
 
     userForm.innerHTML = '';
-    userForm.append(LoginEmail, loginPassword, loginUserBtn, registerUserBtn);
+    userForm.append(LoginEmail, loginPassword, loginUserBtn, lineBreak, registerUserBtn);
 
     loginUserBtn.addEventListener('click', () => {
         const loginUser = {
@@ -30,7 +33,6 @@ export function printLoginForm() {
         .then(data => {
             console.log(data)
             if (data.name) {
-                welcomeMessage.innerText = 'Welcome ' + data.name + '!';
                 localStorage.setItem('loggedIn', data.name);
                 printLogoutBtn();
             } else {
@@ -54,10 +56,11 @@ export function printRegistrationForm() {
     const registerUserBtn = document.createElement('button');
     registerUserBtn.innerText = 'Register';
     const loginUserBtn = document.createElement('button');
+    loginUserBtn.classList.add('rightAlligned')
     loginUserBtn.innerText = 'Already a user? Click here to log in now!';
 
     userForm.innerHTML = '';
-    userForm.append(newUsername, newEmail, newPassword, registerUserBtn, loginUserBtn);
+    userForm.append(newUsername, newEmail, newPassword, registerUserBtn, lineBreak, loginUserBtn);
 
     registerUserBtn.addEventListener('click', () => {
         const user = {
@@ -93,7 +96,6 @@ export function printLogoutBtn() {
     logoutBtn.innerText = 'Log out';
     logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('loggedIn');
-        welcomeMessage.innerText = 'Welcome!'
         printLoginForm();
     });
 

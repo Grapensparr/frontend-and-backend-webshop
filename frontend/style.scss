@@ -2,6 +2,22 @@
     text-align: center;
 }
 
+header {
+    height: 150px;
+
+    h1 {
+        text-align: center;
+    }
+
+    .userForm {
+        float: right;
+    
+        .rightAlligned {
+            float: right;
+        }
+    }
+}
+
 .productGrid {
     display: flex;
     flex-wrap: wrap;
@@ -101,4 +117,8 @@ input {
             text-decoration: underline;
         }
     }
+}
+
+footer {
+    text-align: center;
 }
