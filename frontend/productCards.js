@@ -53,6 +53,9 @@ export function printProductsUser() {
     
             const price = document.createElement('p');
             price.innerText = product.price + ' SEK';
+
+            const stock = document.createElement('p');
+            stock.innerText = 'In stock: ' + product.lager;
     
             const quantity = document.createElement('div');
             quantity.classList.add('quantity');
@@ -62,6 +65,8 @@ export function printProductsUser() {
 
             const quantityInput = document.createElement('input');
             quantityInput.value = 1;
+            quantityInput.setAttribute('min', '0');
+            quantityInput.setAttribute('max', product.lager);
 
             const plus = document.createElement('button');
             plus.innerText = '+';
@@ -71,35 +76,56 @@ export function printProductsUser() {
             addToCartBtn.innerText = 'Add to Cart';
 
             quantity.append(minus, quantityInput, plus, addToCartBtn);
-            productCard.append(image, name, description, price, quantity);
+            productCard.append(image, name, description, price, stock, quantity);
             productGrid.appendChild(productCard);
             main.appendChild(productGrid);
     
             quantityInput.addEventListener('input', () => {
                 if (isNaN(quantityInput.value) || quantityInput.value < 1) {
-                    quantityInput.value = 1;
+                  quantityInput.value = 1;
                 }
             });
-    
+      
             minus.addEventListener('click', () => {
                 const currentValue = parseInt(quantityInput.value);
                 if (currentValue > 1) {
                     quantityInput.value = currentValue - 1;
                 }
             });
-    
+      
             plus.addEventListener('click', () => {
                 const currentValue = parseInt(quantityInput.value);
-                quantityInput.value = currentValue + 1;
+                if (currentValue < product.lager) {
+                    quantityInput.value = currentValue + 1;
+                }
             });
-    
+      
             addToCartBtn.addEventListener('click', () => {
-                const productId = addToCartBtn.closest('.productCard').getAttribute("dataProductId");
+                const productId = addToCartBtn.closest('.productCard').getAttribute('dataProductId');
                 const quantity = parseInt(quantityInput.value);
                 console.log(`Adding ${quantity} of product ${productId} to cart`);
-                
+            
+                product.lager -= quantity;
+                stock.innerText = 'In stock: ' + product.lager;
+            
+                if (quantity > product.lager) {
+                    quantityInput.value = product.lager;
+                }
+
+                if (product.lager <= 0) {
+                    addToCartBtn.disabled = true;
+                }
+
+                localStorage.setItem(productId, product.lager);
+            
                 //Add function for product -> cart
             });
+
+            const stockValue = localStorage.getItem(product._id);
+            if (stockValue) {
+                product.lager = parseInt(stockValue);
+                stock.innerText = `In stock: ${product.lager}`;
+            }
         });
     })
     .catch(err => {

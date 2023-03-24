@@ -66,12 +66,22 @@ button {
     border-radius: 5px;
     margin: 5px;
     font-size: 14px;
+
+    &:hover {
+        background-color: rgb(53, 53, 175);
+    }
+}
+
+button:disabled {
+    background-color: gray;
+    color: white;
+    cursor: not-allowed;
+  
+    &:hover {
+      background-color: gray;
+    }
 }
 
 input {
     font-size: 16px;
-}
-
-button:hover {
-    background-color: rgb(53, 53, 175);
 }
