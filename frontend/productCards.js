@@ -83,6 +83,8 @@ export function printProductsUser() {
             quantityInput.addEventListener('input', () => {
                 if (isNaN(quantityInput.value) || quantityInput.value < 1) {
                   quantityInput.value = 1;
+                } else if (quantityInput.value > product.lager) {
+                    quantityInput.value = product.lager;
                 }
             });
       
@@ -114,6 +116,8 @@ export function printProductsUser() {
 
                 if (product.lager <= 0) {
                     addToCartBtn.disabled = true;
+                    stock.innerText = 'Out of stock';
+                    stock.style.color = 'red'
                 }
 
                 localStorage.setItem(productId, product.lager);
@@ -125,6 +129,13 @@ export function printProductsUser() {
             if (stockValue) {
                 product.lager = parseInt(stockValue);
                 stock.innerText = `In stock: ${product.lager}`;
+
+                if (product.lager <= 0) {
+                    addToCartBtn.disabled = true;
+                    quantityInput.value = 0;
+                    stock.innerText = "Out of stock"
+                    stock.style.color = 'red'
+                }
             }
         });
     })
