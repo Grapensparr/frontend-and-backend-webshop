@@ -2,39 +2,8 @@ const main = document.getElementById('main');
 const productGrid = document.createElement('div');
 productGrid.classList.add('productGrid');
 
-export function printProductsGuest() {
-    fetch('http://localhost:3000/api/products')
-    .then((response) => response.json())
-    .then((products) => {
-        products.forEach((product) => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('productCard');
-
-            const image = document.createElement('img');
-            image.src = './productImage.jpg';
-    
-            const name = document.createElement('h3');
-            name.innerText = product.name;
-    
-            const description = document.createElement('p');
-            description.innerText = product.description;
-    
-            const price = document.createElement('p');
-            price.innerText = product.price + ' SEK';
-
-            productCard.append(image, name, description, price);
-            productGrid.appendChild(productCard);
-            main.appendChild(productGrid);
-        });
-    })
-    .catch(err => {
-        console.error(err);
-        productGrid.innerHTML = '<p>Apologies! We seem to have failed to load our products</p>';
-    });
-}
-
-export function printProductsUser() {
-    fetch('http://localhost:3000/api/products')
+export function printProducts(path = 'http://localhost:3000/api/products') {
+    fetch(path)
     .then((response) => response.json())
     .then((products) => {
         products.forEach((product) => {
@@ -138,6 +107,44 @@ export function printProductsUser() {
                 }
             }
         });
+    })
+    .catch(err => {
+        console.error(err);
+        productGrid.innerHTML = '<p>Apologies! We seem to have failed to load our products</p>';
+    });
+}
+
+export function filterByCategory() {
+    fetch('http://localhost:3000/api/categories')
+    .then(response => response.json())
+    .then(categories => {
+        const categoryContainer = document.createElement('div');
+        categoryContainer.classList.add('categoryContainer');
+        categoryContainer.innerText = 'Filter by:'
+  
+        const allProducts = document.createElement('a');
+        allProducts.innerText = 'All products';
+        allProducts.href = '#';
+        allProducts.addEventListener('click', () => {
+            productGrid.innerHTML = ''
+            printProducts();
+        });
+
+        categoryContainer.appendChild(allProducts);
+  
+        categories.forEach(category => {
+            const categoryLink = document.createElement('a');
+            categoryLink.innerText = category.name;
+            categoryLink.href = '#';
+            categoryLink.addEventListener('click', () => {
+                productGrid.innerHTML = ''
+                printProducts(`http://localhost:3000/api/products/category/${category._id}`);
+            });
+
+            categoryContainer.appendChild(categoryLink);
+        });
+        
+        main.insertBefore(categoryContainer, main.firstChild);
     })
     .catch(err => {
         console.error(err);
