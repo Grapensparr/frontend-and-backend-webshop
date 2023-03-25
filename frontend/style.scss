@@ -119,6 +119,43 @@ input {
     }
 }
 
+.cartSymbol {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    border: 1px solid;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 10px;
+    background-color: white;
+  
+    .cartCount {
+        color: green;
+        font-size: 20px;
+        margin-left: 5px;
+    }
+}
+
+.cartCountAnimation {
+    animation-name: updatedCount;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes updatedCount {
+    0% {
+         font-size: 20px;
+    }
+    50% {
+        font-size: 25px;
+    }
+    100% {
+        font-size: 20px;
+    }
+}
+
 footer {
     text-align: center;
 }

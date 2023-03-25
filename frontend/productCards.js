@@ -1,8 +1,11 @@
+import { updateCartCount } from "./cart.js";
+
 const main = document.getElementById('main');
 const productGrid = document.createElement('div');
 productGrid.classList.add('productGrid');
 
 export function printProducts(path = 'http://localhost:3000/api/products') {
+    const cart = JSON.parse(localStorage.getItem('cart')) || {};
     fetch(path)
     .then((response) => response.json())
     .then((products) => {
@@ -24,6 +27,8 @@ export function printProducts(path = 'http://localhost:3000/api/products') {
             price.innerText = product.price + ' SEK';
 
             const stock = document.createElement('p');
+            const cartQuantity = cart[product._id] || 0;
+            product.lager -= cartQuantity;
             stock.innerText = 'In stock: ' + product.lager;
     
             const quantity = document.createElement('div');
@@ -51,7 +56,7 @@ export function printProducts(path = 'http://localhost:3000/api/products') {
     
             quantityInput.addEventListener('input', () => {
                 if (isNaN(quantityInput.value) || quantityInput.value < 1) {
-                  quantityInput.value = 1;
+                    quantityInput.value = 1;
                 } else if (quantityInput.value > product.lager) {
                     quantityInput.value = product.lager;
                 }
@@ -76,6 +81,9 @@ export function printProducts(path = 'http://localhost:3000/api/products') {
                 const quantity = parseInt(quantityInput.value);
                 console.log(`Adding ${quantity} of product ${productId} to cart`);
             
+                cart[productId] = (cart[productId] || 0) + quantity;
+                localStorage.setItem('cart', JSON.stringify(cart));
+
                 product.lager -= quantity;
                 stock.innerText = 'In stock: ' + product.lager;
             
@@ -91,6 +99,7 @@ export function printProducts(path = 'http://localhost:3000/api/products') {
 
                 localStorage.setItem(productId, product.lager);
             
+                updateCartCount(quantity);
                 //Add function for product -> cart
             });
 
