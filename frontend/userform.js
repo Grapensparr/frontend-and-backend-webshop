@@ -31,7 +31,6 @@ export function printLoginForm() {
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data)
             if (data.name) {
                 localStorage.setItem('loggedIn', data.name);
                 localStorage.setItem('userId', data.id);
@@ -41,6 +40,8 @@ export function printLoginForm() {
             } else {
                 const errorMessage = document.createElement('h3');
                 errorMessage.innerText = 'Invalid credentials';
+                errorMessage.classList.add('errorMessage')
+                userForm.append(errorMessage)
             }
         });
     });
@@ -125,44 +126,41 @@ export function printOrderHistoryBtn() {
             },
             body: JSON.stringify({ user: userId })
         })
-        .then(response => {
-            if (response.ok) {
-                response.json()
-                .then(data => {
-                    data.forEach((order, index) => {
-                        const orderItem = document.createElement('div');
-                        const orderNumber = index + 1;
-                        orderItem.innerHTML = `<p><strong>Order ${orderNumber}:</strong></p>`;
+        .then((response) => response.json())
+        .then(data => {
+            data.forEach((order, index) => {
+                const orderItem = document.createElement('div');
+                const orderNumber = index + 1;
+                orderItem.innerHTML = `<p><strong>Order ${orderNumber}:</strong></p>`;
 
-                        const orderDetails = document.createElement('div');
-                        orderDetails.innerHTML = '';
-                        
-                        Object.keys(order.products).forEach((productId) => {
-                            const productName = order.products[productId].name;
-                            const productQuantity = order.products[productId].quantity;
-                            orderDetails.innerHTML += `<p>${productName} (quantity: ${productQuantity})</p>`;
-                        });
-                        
-                        orders.append(orderItem, orderDetails);
-                    });
+                const orderDetails = document.createElement('div');
+                orderDetails.innerHTML = '';
+                
+                Object.keys(order.products).forEach((productId) => {
+                    const productName = order.products[productId].name;
+                    const productQuantity = order.products[productId].quantity;
+                    orderDetails.innerHTML += `<p>${productName} (quantity: ${productQuantity})</p>`;
                 });
-            } else {
-                console.error('Failed to get order history');
-            }
+                
+                orders.append(orderItem, orderDetails);
+            });
+        })
+        .catch(err => {
+            console.error(err);
         });
 
         const overlay = document.createElement('div');
         overlay.classList.add('overlay');
 
-        const closeButton = document.createElement('button');
-        closeButton.classList.add('closeButton');
-        closeButton.innerText = 'X';
-        closeButton.addEventListener('click', () => {
+        const closeBtn = document.createElement('button');
+        closeBtn.classList.add('closeBtn');
+        closeBtn.innerText = 'X';
+        closeBtn.addEventListener('click', () => {
             orderHistoryPopup.remove();
             overlay.classList.remove('overlay');
         });
 
-        orderHistoryPopup.append(orders, closeButton);
+        orderHistoryPopup.append(orders, closeBtn);
         document.body.appendChild(overlay);
         document.body.appendChild(orderHistoryPopup);
     });

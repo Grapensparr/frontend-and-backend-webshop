@@ -34,7 +34,7 @@ export function updateCartCount(quantity) {
     cartCount.innerText = updatedCartCount;
 }
 
-function showCart() {
+export function showCart() {
     const userId = localStorage.getItem('userId');
     const productGrid = document.querySelector('.productGrid')
     const cartItems = JSON.parse(localStorage.getItem('cart')) || {};
@@ -63,17 +63,15 @@ function showCart() {
         name.innerText = cartItem.name;
     
         const quantityContainer = document.createElement('div');
-        quantityContainer.classList.add('cartPopupQuantity');
     
         const minusBtn = document.createElement('button');
         minusBtn.innerText = '-';
-        minusBtn.classList.add('quantityButton');
         minusBtn.addEventListener('click', () => {
             if (cartItem.quantity > 1) {
                 cartItem.quantity--;
                 cartItem.instock++;
                 quantity.innerText = cartItem.quantity;
-                totalPrice.innerText = `Total price: ${cartItem.price * cartItem.quantity} SEK (${cartItem.price} SEK x ${cartItem.quantity})`;
+                totalPrice.innerText = `Total price: ${cartItem.price * cartItem.quantity} SEK`;
                 localStorage.setItem('cart', JSON.stringify(cartItems));
                 updateCartCount(-1);
                 totalPriceSum -= cartItem.price;
@@ -86,13 +84,12 @@ function showCart() {
     
         const plusBtn = document.createElement('button');
         plusBtn.innerText = '+';
-        plusBtn.classList.add('quantityButton');
         plusBtn.addEventListener('click', () => {
             if (cartItem.quantity < cartItem.originalStock) {
                 cartItem.quantity++;
                 cartItem.instock--;
                 quantity.innerText = cartItem.quantity;
-                totalPrice.innerText = `Total price: ${cartItem.price * cartItem.quantity} SEK (${cartItem.price} SEK x ${cartItem.quantity})`;
+                totalPrice.innerText = `Total price: ${cartItem.price * cartItem.quantity} SEK`;
                 localStorage.setItem('cart', JSON.stringify(cartItems));
                 updateCartCount(1);
                 totalPriceSum += cartItem.price;
@@ -100,41 +97,49 @@ function showCart() {
             }
         });
     
+        const removeBtn = document.createElement('button');
+        removeBtn.innerText = 'Remove';
+        removeBtn.addEventListener('click', () => {
+            delete cartItems[productId];
+            localStorage.setItem('cart', JSON.stringify(cartItems));
+            printItem.remove();
+            totalPriceSum -= cartItem.price * cartItem.quantity;
+            total.innerText = `Total: ${totalPriceSum} SEK`;
+            updateCartCount(-cartItem.quantity);
+        });
+
         const totalPrice = document.createElement('div');
-        totalPrice.classList.add('cartPopupTotalPrice');
-        totalPrice.innerText = `Total price: ${cartItem.price * cartItem.quantity} SEK (${cartItem.price} SEK x ${cartItem.quantity})`;
+        totalPrice.innerText = `Total price: ${cartItem.price * cartItem.quantity} SEK`;
 
         totalPriceSum += cartItem.price * cartItem.quantity;
 
-        quantityContainer.append(minusBtn, quantity, plusBtn);
+        quantityContainer.append(minusBtn, quantity, plusBtn, removeBtn);
         productDetails.append(name, quantityContainer, totalPrice);
         printItem.append(image, productDetails);
         cartItemsContainer.appendChild(printItem);
     }
   
     const total = document.createElement('div');
-    total.classList.add('cartPopupTotal');
     total.innerText = `Total: ${totalPriceSum} SEK`;
 
-    const purchaseButton = document.createElement('button');
-    purchaseButton.classList.add('purchaseButton');
-    purchaseButton.innerText = 'Purchase';
+    const purchaseBtn = document.createElement('button');
+    purchaseBtn.innerText = 'Purchase';
     if(userId) {
-        purchaseButton.disabled = false;
+        purchaseBtn.disabled = false;
     } else {
-        purchaseButton.disabled = true;
+        purchaseBtn.disabled = true;
         const errorMessage = document.createElement('p');
         errorMessage.classList.add('errorMessage')
         errorMessage.innerText = 'Please note that you must be logged in to place an order.'
         cartPopup.appendChild(errorMessage);
     }
 
-    purchaseButton.addEventListener('click', makePurchase)
+    purchaseBtn.addEventListener('click', makePurchase)
 
-    const closeButton = document.createElement('button');
-    closeButton.classList.add('closeButton');
-    closeButton.innerText = 'X';
-    closeButton.addEventListener('click', () => {
+    const closeBtn = document.createElement('button');
+    closeBtn.classList.add('closeBtn');
+    closeBtn.innerText = 'X';
+    closeBtn.addEventListener('click', () => {
         cartPopup.remove();
         overlay.classList.remove('overlay');
         localStorage.setItem('cart', JSON.stringify(cartItems));
@@ -146,6 +151,6 @@ function showCart() {
     overlay.classList.add('overlay');
     document.body.appendChild(overlay);
 
-    cartPopup.append(cartItemsContainer, total, purchaseButton, closeButton);
+    cartPopup.append(cartItemsContainer, total, purchaseBtn, closeBtn);
     document.body.appendChild(cartPopup);
 }

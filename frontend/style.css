@@ -1,7 +1,3 @@
-#welcomeMessage {
-  text-align: center;
-}
-
 header {
   height: 150px;
 }
@@ -15,52 +11,8 @@ header .userForm .rightAlligned {
   float: right;
 }
 
-.productGrid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-.productCard {
-  max-width: 250px;
-  margin-bottom: 20px;
-  padding: 10px;
-  border: 1px solid lightgray;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-.productCard img {
-  width: 100%;
-  height: auto;
-  padding-bottom: 10px;
-}
-.productCard h3 {
-  font-size: 20px;
-  padding-bottom: 10px;
-  margin: 0;
-}
-.productCard p {
+input {
   font-size: 16px;
-  padding-bottom: 10px;
-  margin: 0;
-}
-.productCard .quantity {
-  padding-top: 10px;
-  display: flex;
-}
-.productCard .quantity input {
-  margin-top: 5px;
-  width: 50px;
-  text-align: center;
-  font-weight: bold;
-  height: 28px;
-}
-.productCard .quantity button {
-  font-size: 20px;
-}
-.productCard .quantity .addToCart {
-  font-size: 14px;
-  margin-left: 10px;
 }
 
 button {
@@ -85,8 +37,51 @@ button:disabled:hover {
   background-color: gray;
 }
 
-input {
+.productGrid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+.productGrid .productCard {
+  max-width: 250px;
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.productGrid .productCard img {
+  width: 100%;
+  height: auto;
+  padding-bottom: 10px;
+}
+.productGrid .productCard h3 {
+  font-size: 20px;
+  padding-bottom: 10px;
+  margin: 0;
+}
+.productGrid .productCard p {
   font-size: 16px;
+  padding-bottom: 10px;
+  margin: 0;
+}
+.productGrid .productCard .quantity {
+  padding-top: 10px;
+  display: flex;
+}
+.productGrid .productCard .quantity input {
+  margin-top: 5px;
+  width: 50px;
+  text-align: center;
+  font-weight: bold;
+  height: 28px;
+}
+.productGrid .productCard .quantity button {
+  font-size: 20px;
+}
+.productGrid .productCard .quantity .addToCart {
+  font-size: 14px;
+  margin-left: 10px;
 }
 
 .categoryContainer {
@@ -122,8 +117,7 @@ input {
   font-size: 20px;
   margin-left: 5px;
 }
-
-.cartCountAnimation {
+.cartSymbol .cartCountAnimation {
   animation-name: updatedCount;
   animation-duration: 1s;
   animation-fill-mode: forwards;
@@ -163,37 +157,37 @@ input {
   border-radius: 10px;
   z-index: 2;
 }
-.cartPopup .closeButton, .confirmationPopup .closeButton, .orderHistoryPopup .closeButton {
+.cartPopup .closeBtn, .confirmationPopup .closeBtn, .orderHistoryPopup .closeBtn {
   position: absolute;
   top: 10px;
   right: 10px;
 }
-.cartPopup .closeButton:hover, .confirmationPopup .closeButton:hover, .orderHistoryPopup .closeButton:hover {
+.cartPopup .closeBtn:hover, .confirmationPopup .closeBtn:hover, .orderHistoryPopup .closeBtn:hover {
   background-color: rgb(233, 0, 0);
 }
 .cartPopup .cartItemsContainer, .cartPopup .orders, .confirmationPopup .cartItemsContainer, .confirmationPopup .orders, .orderHistoryPopup .cartItemsContainer, .orderHistoryPopup .orders {
   max-height: calc(60vh - 30px);
   overflow-y: auto;
 }
-.cartPopup .cartPopupItem, .confirmationPopup .cartPopupItem, .orderHistoryPopup .cartPopupItem {
+.cartPopup .cartItemsContainer .cartPopupItem, .cartPopup .orders .cartPopupItem, .confirmationPopup .cartItemsContainer .cartPopupItem, .confirmationPopup .orders .cartPopupItem, .orderHistoryPopup .cartItemsContainer .cartPopupItem, .orderHistoryPopup .orders .cartPopupItem {
   display: flex;
   align-items: center;
   margin-bottom: 20px;
 }
-.cartPopup .cartPopupItem .cartPopupImage, .confirmationPopup .cartPopupItem .cartPopupImage, .orderHistoryPopup .cartPopupItem .cartPopupImage {
+.cartPopup .cartItemsContainer .cartPopupItem .cartPopupImage, .cartPopup .orders .cartPopupItem .cartPopupImage, .confirmationPopup .cartItemsContainer .cartPopupItem .cartPopupImage, .confirmationPopup .orders .cartPopupItem .cartPopupImage, .orderHistoryPopup .cartItemsContainer .cartPopupItem .cartPopupImage, .orderHistoryPopup .orders .cartPopupItem .cartPopupImage {
   width: 100px;
   height: auto;
   margin-right: 20px;
 }
-.cartPopup .cartPopupItem .cartPopupDetails, .confirmationPopup .cartPopupItem .cartPopupDetails, .orderHistoryPopup .cartPopupItem .cartPopupDetails {
+.cartPopup .cartItemsContainer .cartPopupItem .cartPopupDetails, .cartPopup .orders .cartPopupItem .cartPopupDetails, .confirmationPopup .cartItemsContainer .cartPopupItem .cartPopupDetails, .confirmationPopup .orders .cartPopupItem .cartPopupDetails, .orderHistoryPopup .cartItemsContainer .cartPopupItem .cartPopupDetails, .orderHistoryPopup .orders .cartPopupItem .cartPopupDetails {
   display: flex;
   flex-direction: column;
 }
-.cartPopup .cartPopupItem .cartPopupName, .confirmationPopup .cartPopupItem .cartPopupName, .orderHistoryPopup .cartPopupItem .cartPopupName {
+.cartPopup .cartItemsContainer .cartPopupItem .cartPopupName, .cartPopup .orders .cartPopupItem .cartPopupName, .confirmationPopup .cartItemsContainer .cartPopupItem .cartPopupName, .confirmationPopup .orders .cartPopupItem .cartPopupName, .orderHistoryPopup .cartItemsContainer .cartPopupItem .cartPopupName, .orderHistoryPopup .orders .cartPopupItem .cartPopupName {
   font-weight: bold;
   margin-bottom: 5px;
 }
-.cartPopup .cartPopupItem .cartPopupPrice, .confirmationPopup .cartPopupItem .cartPopupPrice, .orderHistoryPopup .cartPopupItem .cartPopupPrice {
+.cartPopup .cartItemsContainer .cartPopupItem .cartPopupPrice, .cartPopup .orders .cartPopupItem .cartPopupPrice, .confirmationPopup .cartItemsContainer .cartPopupItem .cartPopupPrice, .confirmationPopup .orders .cartPopupItem .cartPopupPrice, .orderHistoryPopup .cartItemsContainer .cartPopupItem .cartPopupPrice, .orderHistoryPopup .orders .cartPopupItem .cartPopupPrice {
   font-size: 0.9rem;
 }
 .cartPopup .errorMessage, .confirmationPopup .errorMessage, .orderHistoryPopup .errorMessage {
@@ -203,13 +197,17 @@ input {
   color: red;
 }
 
-.confirmationMessage {
+.errorMessage {
   text-align: center;
-}
-.confirmationMessage #heart {
+  font-weight: bold;
+  font-size: 20px;
   color: red;
+  margin-top: 10px;
 }
 
-footer {
+footer, .confirmationMessage {
   text-align: center;
+}
+footer #heart, .confirmationMessage #heart {
+  color: red;
 }/*# sourceMappingURL=style.css.map */
