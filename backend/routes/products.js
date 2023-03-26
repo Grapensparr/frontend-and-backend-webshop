@@ -65,21 +65,23 @@ router.get('/category/:categoryId', function(req, res, next) {
 router.post('/updateStock', function(req, res, next) {
     const products = req.body.products;
 
-    products.forEach(product => {
+    const promises = products.map(product => {
         const productId = product.productId;
         const quantity = product.quantity;
-    
-        req.app.locals.db.collection('products').updateOne(
+
+        return req.app.locals.db.collection('products').updateOne(
             { _id: new ObjectId(productId) },
             { $inc: { lager: -quantity } }
-        )
-        .then(result => {
-            res.json(result)
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).json({ error: 'Internal server error' });
-        });
+        );
+    });
+
+    Promise.all(promises)
+    .then(() => {
+        res.json({ message: 'Stock updated successfully' });
+    })
+    .catch(err => {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
     });
 });
 
