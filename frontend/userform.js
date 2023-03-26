@@ -34,6 +34,9 @@ export function printLoginForm() {
             console.log(data)
             if (data.name) {
                 localStorage.setItem('loggedIn', data.name);
+                localStorage.setItem('userId', data.id);
+                userForm.innerHTML = '';
+                printOrderHistoryBtn();
                 printLogoutBtn();
             } else {
                 const errorMessage = document.createElement('h3');
@@ -96,9 +99,73 @@ export function printLogoutBtn() {
     logoutBtn.innerText = 'Log out';
     logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('loggedIn');
+        localStorage.removeItem('userId');
         printLoginForm();
     });
 
-    userForm.innerHTML = '';
     userForm.appendChild(logoutBtn);
+}
+
+export function printOrderHistoryBtn() {
+    const orderHistory = document.createElement('button');
+    orderHistory.innerText = 'View order history';
+  
+    orderHistory.addEventListener('click', () => {
+        const orderHistoryPopup = document.createElement('div');
+        orderHistoryPopup.classList.add('orderHistoryPopup');
+      
+        const orders = document.createElement('div');
+        orders.classList.add('orders');
+
+        const userId = localStorage.getItem('userId');
+        fetch('http://localhost:3000/api/orders/' + userId, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user: userId })
+        })
+        .then(response => {
+            if (response.ok) {
+                response.json()
+                .then(data => {
+                    data.forEach((order, index) => {
+                        const orderItem = document.createElement('div');
+                        const orderNumber = index + 1;
+                        orderItem.innerHTML = `<p><strong>Order ${orderNumber}:</strong></p>`;
+
+                        const orderDetails = document.createElement('div');
+                        orderDetails.innerHTML = '';
+                        
+                        Object.keys(order.products).forEach((productId) => {
+                            const productName = order.products[productId].name;
+                            const productQuantity = order.products[productId].quantity;
+                            orderDetails.innerHTML += `<p>${productName} (quantity: ${productQuantity})</p>`;
+                        });
+                        
+                        orders.append(orderItem, orderDetails);
+                    });
+                });
+            } else {
+                console.error('Failed to get order history');
+            }
+        });
+
+        const overlay = document.createElement('div');
+        overlay.classList.add('overlay');
+
+        const closeButton = document.createElement('button');
+        closeButton.classList.add('closeButton');
+        closeButton.innerText = 'X';
+        closeButton.addEventListener('click', () => {
+            orderHistoryPopup.remove();
+            overlay.classList.remove('overlay');
+        });
+
+        orderHistoryPopup.append(orders, closeButton);
+        document.body.appendChild(overlay);
+        document.body.appendChild(orderHistoryPopup);
+    });
+  
+    userForm.appendChild(orderHistory);
 }

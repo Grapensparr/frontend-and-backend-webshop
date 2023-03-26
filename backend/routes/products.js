@@ -62,4 +62,25 @@ router.get('/category/:categoryId', function(req, res, next) {
     });
 });
 
+router.post('/updateStock', function(req, res, next) {
+    const products = req.body.products;
+
+    products.forEach(product => {
+        const productId = product.productId;
+        const quantity = product.quantity;
+    
+        req.app.locals.db.collection('products').updateOne(
+            { _id: new ObjectId(productId) },
+            { $inc: { lager: -quantity } }
+        )
+        .then(result => {
+            res.json(result)
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ error: 'Internal server error' });
+        });
+    });
+});
+
 module.exports = router;

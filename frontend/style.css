@@ -76,7 +76,6 @@ button {
 button:hover {
   background-color: rgb(53, 53, 175);
 }
-
 button:disabled {
   background-color: gray;
   color: white;
@@ -116,6 +115,7 @@ input {
   align-items: flex-end;
   padding: 10px;
   background-color: white;
+  cursor: pointer;
 }
 .cartSymbol .cartCount {
   color: green;
@@ -128,7 +128,6 @@ input {
   animation-duration: 1s;
   animation-fill-mode: forwards;
 }
-
 @keyframes updatedCount {
   0% {
     font-size: 20px;
@@ -140,6 +139,77 @@ input {
     font-size: 20px;
   }
 }
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+}
+
+.cartPopup, .confirmationPopup, .orderHistoryPopup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 50px;
+  max-width: 90vw;
+  min-width: 40vw;
+  min-height: 60vh;
+  border-radius: 10px;
+  z-index: 2;
+}
+.cartPopup .closeButton, .confirmationPopup .closeButton, .orderHistoryPopup .closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.cartPopup .closeButton:hover, .confirmationPopup .closeButton:hover, .orderHistoryPopup .closeButton:hover {
+  background-color: rgb(233, 0, 0);
+}
+.cartPopup .cartItemsContainer, .cartPopup .orders, .confirmationPopup .cartItemsContainer, .confirmationPopup .orders, .orderHistoryPopup .cartItemsContainer, .orderHistoryPopup .orders {
+  max-height: calc(60vh - 30px);
+  overflow-y: auto;
+}
+.cartPopup .cartPopupItem, .confirmationPopup .cartPopupItem, .orderHistoryPopup .cartPopupItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.cartPopup .cartPopupItem .cartPopupImage, .confirmationPopup .cartPopupItem .cartPopupImage, .orderHistoryPopup .cartPopupItem .cartPopupImage {
+  width: 100px;
+  height: auto;
+  margin-right: 20px;
+}
+.cartPopup .cartPopupItem .cartPopupDetails, .confirmationPopup .cartPopupItem .cartPopupDetails, .orderHistoryPopup .cartPopupItem .cartPopupDetails {
+  display: flex;
+  flex-direction: column;
+}
+.cartPopup .cartPopupItem .cartPopupName, .confirmationPopup .cartPopupItem .cartPopupName, .orderHistoryPopup .cartPopupItem .cartPopupName {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.cartPopup .cartPopupItem .cartPopupPrice, .confirmationPopup .cartPopupItem .cartPopupPrice, .orderHistoryPopup .cartPopupItem .cartPopupPrice {
+  font-size: 0.9rem;
+}
+.cartPopup .errorMessage, .confirmationPopup .errorMessage, .orderHistoryPopup .errorMessage {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  color: red;
+}
+
+.confirmationMessage {
+  text-align: center;
+}
+.confirmationMessage #heart {
+  color: red;
+}
+
 footer {
   text-align: center;
 }/*# sourceMappingURL=style.css.map */

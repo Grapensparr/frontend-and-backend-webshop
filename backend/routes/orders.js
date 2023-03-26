@@ -50,4 +50,17 @@ router.post('/user', function(req, res, next) {
     }
 });
 
+router.post('/:userId', function(req, res, next) {
+    req.app.locals.db.collection('orders').find({ user: req.body.user }).toArray()
+    .then(result => {
+        console.log('All orders for user', result);
+        res.json(result);
+        console.log(result)
+    })
+    .catch(err => {
+        console.error(err);
+        res.status(500).json({ error: 'Internal server error' });
+    });
+});
+
 module.exports = router;

@@ -26,10 +26,16 @@ export function printProducts(path = 'http://localhost:3000/api/products') {
             const price = document.createElement('p');
             price.innerText = product.price + ' SEK';
 
+            const originalStock = product.lager;
             const stock = document.createElement('p');
-            const cartQuantity = cart[product._id] || 0;
+            const cartQuantity = cart[product._id]?.quantity || 0;
             product.lager -= cartQuantity;
-            stock.innerText = 'In stock: ' + product.lager;
+            if (product.lager <= 0) {
+                stock.innerText = 'Out of stock';
+                stock.style.color = 'red';
+            } else {
+                stock.innerText = 'In stock: ' + product.lager;
+            }
     
             const quantity = document.createElement('div');
             quantity.classList.add('quantity');
@@ -80,9 +86,6 @@ export function printProducts(path = 'http://localhost:3000/api/products') {
                 const productId = addToCartBtn.closest('.productCard').getAttribute('dataProductId');
                 const quantity = parseInt(quantityInput.value);
                 console.log(`Adding ${quantity} of product ${productId} to cart`);
-            
-                cart[productId] = (cart[productId] || 0) + quantity;
-                localStorage.setItem('cart', JSON.stringify(cart));
 
                 product.lager -= quantity;
                 stock.innerText = 'In stock: ' + product.lager;
@@ -94,13 +97,22 @@ export function printProducts(path = 'http://localhost:3000/api/products') {
                 if (product.lager <= 0) {
                     addToCartBtn.disabled = true;
                     stock.innerText = 'Out of stock';
-                    stock.style.color = 'red'
+                    stock.style.color = 'red';
                 }
 
-                localStorage.setItem(productId, product.lager);
+                cart[productId] = {
+                    name: product.name,
+                    price: product.price,
+                    image: image.src,
+                    quantity: (cart[productId] ? cart[productId].quantity : 0) + quantity,
+                    instock: product.lager,
+                    originalStock: originalStock,
+                    productId: product._id
+                }
+
+                localStorage.setItem('cart', JSON.stringify(cart));
             
                 updateCartCount(quantity);
-                //Add function for product -> cart
             });
 
             const stockValue = localStorage.getItem(product._id);
@@ -111,15 +123,15 @@ export function printProducts(path = 'http://localhost:3000/api/products') {
                 if (product.lager <= 0) {
                     addToCartBtn.disabled = true;
                     quantityInput.value = 0;
-                    stock.innerText = "Out of stock"
-                    stock.style.color = 'red'
+                    stock.innerText = "Out of stock";
+                    stock.style.color = 'red';
                 }
             }
         });
     })
     .catch(err => {
         console.error(err);
-        productGrid.innerHTML = '<p>Apologies! We seem to have failed to load our products</p>';
+        productGrid.innerText = 'Apologies! We seem to have failed to load our products';
     });
 }
 
@@ -129,7 +141,7 @@ export function filterByCategory() {
     .then(categories => {
         const categoryContainer = document.createElement('div');
         categoryContainer.classList.add('categoryContainer');
-        categoryContainer.innerText = 'Filter by:'
+        categoryContainer.innerText = 'Filter by:';
   
         const allProducts = document.createElement('a');
         allProducts.innerText = 'All products';
@@ -146,7 +158,7 @@ export function filterByCategory() {
             categoryLink.innerText = category.name;
             categoryLink.href = '#';
             categoryLink.addEventListener('click', () => {
-                productGrid.innerHTML = ''
+                productGrid.innerHTML = '';
                 printProducts(`http://localhost:3000/api/products/category/${category._id}`);
             });
 
@@ -157,6 +169,6 @@ export function filterByCategory() {
     })
     .catch(err => {
         console.error(err);
-        productGrid.innerHTML = '<p>Apologies! We seem to have failed to load our products</p>';
+        productGrid.innerText = 'Apologies! We seem to have failed to load our products';
     });
 }

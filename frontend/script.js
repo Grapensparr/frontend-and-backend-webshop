@@ -1,9 +1,10 @@
-import { printLoginForm, printLogoutBtn } from './userform.js';
+import { printLoginForm, printLogoutBtn, printOrderHistoryBtn } from './userform.js';
 import { printProducts, filterByCategory } from './productCards.js';
-import { shoppingCart } from './cart.js';
+import { shoppingCartSymbol } from './cart.js';
 
 const loggedIn = localStorage.getItem('loggedIn');
 if(loggedIn) {
+    printOrderHistoryBtn();
     printLogoutBtn();
 } else {
     printLoginForm();
@@ -11,4 +12,4 @@ if(loggedIn) {
 
 filterByCategory();
 printProducts();
-shoppingCart();
+shoppingCartSymbol();

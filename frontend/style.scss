@@ -86,15 +86,15 @@ button {
     &:hover {
         background-color: rgb(53, 53, 175);
     }
-}
 
-button:disabled {
-    background-color: gray;
-    color: white;
-    cursor: not-allowed;
-  
-    &:hover {
-      background-color: gray;
+    &:disabled {
+        background-color: gray;
+        color: white;
+        cursor: not-allowed;
+
+        &:hover {
+            background-color: gray;
+        }
     }
 }
 
@@ -130,6 +130,7 @@ input {
     align-items: flex-end;
     padding: 10px;
     background-color: white;
+    cursor: pointer;
   
     .cartCount {
         color: green;
@@ -142,17 +143,97 @@ input {
     animation-name: updatedCount;
     animation-duration: 1s;
     animation-fill-mode: forwards;
+
+    @keyframes updatedCount {
+        0% {
+             font-size: 20px;
+        }
+        50% {
+            font-size: 25px;
+        }
+        100% {
+            font-size: 20px;
+        }
+    }
 }
 
-@keyframes updatedCount {
-    0% {
-         font-size: 20px;
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+  
+.cartPopup, .confirmationPopup, .orderHistoryPopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 50px;
+    max-width: 90vw;
+    min-width: 40vw;
+    min-height: 60vh;
+    border-radius: 10px;
+    z-index: 2;
+
+    .closeButton {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+
+        &:hover {
+            background-color: rgb(233, 0, 0);
+        }
     }
-    50% {
-        font-size: 25px;
+
+    .cartItemsContainer, .orders {
+        max-height: calc(60vh - 30px);
+        overflow-y: auto;
     }
-    100% {
+
+    .cartPopupItem {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+
+        .cartPopupImage {
+            width: 100px;
+            height: auto;
+            margin-right: 20px;
+        }
+
+        .cartPopupDetails {
+            display: flex;
+            flex-direction: column;
+        }
+          
+        .cartPopupName {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+          
+        .cartPopupPrice {
+            font-size: 0.9rem;
+        }
+    }
+
+    .errorMessage {
+        text-align: center;
+        font-weight: bold;
         font-size: 20px;
+        color: red;
+    }
+}
+
+.confirmationMessage {
+    text-align: center;
+
+    #heart {
+        color: red;
     }
 }
 
